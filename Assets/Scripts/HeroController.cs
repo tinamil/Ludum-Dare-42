@@ -26,43 +26,41 @@ public class HeroController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (controller.isGrounded)
+        if (controller.isGrounded == false)
         {
-            if (Time.time < lastDodgeTime + dodgeDuration)
-            {
-                Move(dodgeDirection, dodgeSpeed);
-            }
-            else if (Time.time < lastDodgeTime + dodgeCooldown)
-            {
-                Move(Vector3.zero, 0);
-            }
+            Move(Vector3.zero, 0);
+            return;
+        }
+        if (Time.time < lastDodgeTime + dodgeDuration)
+        {
+            Move(dodgeDirection, dodgeSpeed);
+            return;
+        }
+        else if (Time.time < lastDodgeTime + dodgeCooldown)
+        {
+            Move(Vector3.zero, 0);
+            return;
+        }
 
-            var vertical = Input.GetAxis("Vertical");
-            var horizontal = Input.GetAxis("Horizontal");
-            var isDodgeStart = Input.GetButton("Jump");
+        var vertical = Input.GetAxis("Vertical");
+        var horizontal = Input.GetAxis("Horizontal");
+        var isDodgeStart = Input.GetButton("Jump");
 
-            var direction = transform.forward * vertical + transform.right * horizontal;
+        var direction = transform.forward * vertical + transform.right * horizontal;
 
-            if (direction.magnitude > 1e-3)
-            {
-                if (isDodgeStart)
-                {
-                    Dodge(direction);
-                }
-                else
-                {
-                    Move(direction, runSpeed);
-                }
-            }
-            else
-            {
-                Move(Vector3.zero, 0);
-            }
+        if (direction.magnitude < 1e-3)
+        {
+            Move(Vector3.zero, 0);
+            return;
+        }
 
+        if (isDodgeStart)
+        {
+            Dodge(direction);
         }
         else
         {
-            Move(Vector3.zero, 0);
+            Move(direction, runSpeed);
         }
     }
 
@@ -77,7 +75,6 @@ public class HeroController : MonoBehaviour
     {
         Move(direction, dodgeSpeed);
         lastDodgeTime = Time.time;
-        animator.SetTrigger("Dodge");
         dodgeDirection = direction.normalized;
     }
 }
