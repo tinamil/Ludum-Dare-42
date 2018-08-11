@@ -45,6 +45,11 @@ public class HeroController : MonoBehaviour
         var vertical = Input.GetAxis("Vertical");
         var horizontal = Input.GetAxis("Horizontal");
         var isDodgeStart = Input.GetButton("Jump");
+        var leftClick = Input.GetMouseButton(0);
+        var rightClick = Input.GetMouseButton(1);
+
+        animator.SetBool("Attack Right", leftClick);
+        animator.SetBool("Attack Down", rightClick);
 
         var direction = transform.forward * vertical + transform.right * horizontal;
 
