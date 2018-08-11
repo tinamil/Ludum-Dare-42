@@ -7,6 +7,8 @@ public class Enemy : MonoBehaviour
 
     GameObject hero;
     Coroutine runningFade;
+    public GameObject[] HitTargets;
+    public float RotationSpeed;
 
     // Use this for initialization
     void Start()
@@ -17,7 +19,17 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.LookAt(hero.transform);
+        var heroVector = hero.transform.position - transform.position;
+        if(heroVector.magnitude < 10)
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(heroVector), Time.deltaTime * RotationSpeed);
+            foreach(var obj in HitTargets)
+            {
+                obj.transform.position = hero.transform.position + new Vector3(0, 1f, 0);
+            }
+        }
+        
+
     }
 
     private void OnTriggerEnter(Collider other)
@@ -36,7 +48,7 @@ public class Enemy : MonoBehaviour
         GetComponent<Animator>().SetTrigger("OnHit");
         var textComponent = GetComponentInChildren<TMPro.TMP_Text>(true);
         textComponent.gameObject.SetActive(true);
-        textComponent.text = damage.ToString();
+        textComponent.text = damage.ToString("f0");
         if (runningFade != null)
         {
             StopCoroutine(runningFade);
