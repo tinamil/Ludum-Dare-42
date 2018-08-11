@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(Animator))]
 public class HeroController : MonoBehaviour
 {
     public float runSpeed = 6;
@@ -11,6 +12,7 @@ public class HeroController : MonoBehaviour
     public float dodgeCooldown = 2;
 
     private CharacterController controller;
+    private Animator animator;
     private float lastDodgeTime = float.NegativeInfinity;
     private Vector3 dodgeDirection;
 
@@ -18,6 +20,7 @@ public class HeroController : MonoBehaviour
     void Start()
     {
         controller = GetComponent<CharacterController>();
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -25,17 +28,13 @@ public class HeroController : MonoBehaviour
     {
         if (controller.isGrounded)
         {
-            var currentRunSpeed = runSpeed * Time.deltaTime;
-            var currentDodgeSpeed = dodgeSpeed * Time.deltaTime;
-            var gravity = Physics.gravity * Time.deltaTime;
             if (Time.time < lastDodgeTime + dodgeDuration)
             {
-                var flags = controller.Move(dodgeDirection.normalized * currentDodgeSpeed + gravity);
-                return;
+                Move(dodgeDirection, dodgeSpeed);
             }
             else if (Time.time < lastDodgeTime + dodgeCooldown)
             {
-                return;
+                Move(Vector3.zero, 0);
             }
 
             var vertical = Input.GetAxis("Vertical");
@@ -48,20 +47,37 @@ public class HeroController : MonoBehaviour
             {
                 if (isDodgeStart)
                 {
-                    controller.Move(direction.normalized * currentDodgeSpeed + gravity);
-                    lastDodgeTime = Time.time;
-                    dodgeDirection = direction.normalized;
+                    Dodge(direction);
                 }
                 else
                 {
-                    controller.Move(direction.normalized * currentRunSpeed + gravity);
+                    Move(direction, runSpeed);
                 }
+            }
+            else
+            {
+                Move(Vector3.zero, 0);
             }
 
         }
         else
         {
-            var flags = controller.Move(Physics.gravity * Time.deltaTime);
+            Move(Vector3.zero, 0);
         }
+    }
+
+    private void Move(Vector3 direction, float speed)
+    {
+        var gravity = Physics.gravity * Time.deltaTime;
+        animator.SetFloat("Speed", speed);
+        controller.Move(direction.normalized * speed * Time.deltaTime + gravity);
+    }
+
+    private void Dodge(Vector3 direction)
+    {
+        Move(direction, dodgeSpeed);
+        lastDodgeTime = Time.time;
+        animator.SetTrigger("Dodge");
+        dodgeDirection = direction.normalized;
     }
 }
