@@ -8,12 +8,9 @@ public class HeroController : MonoBehaviour
 {
     public float runSpeed = 6;
     public float dodgeSpeed = 18;
-    public float dodgeDuration = 1;
-    public float dodgeCooldown = 2;
 
     private CharacterController controller;
     private Animator animator;
-    private float lastDodgeTime = float.NegativeInfinity;
     private Vector3 dodgeDirection;
 
     // Use this for initialization
@@ -26,36 +23,38 @@ public class HeroController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (controller.isGrounded == false)
-        {
-            Move(Vector3.zero, 0);
-            return;
-        }
-        if (Time.time < lastDodgeTime + dodgeDuration)
-        {
-            Move(dodgeDirection, dodgeSpeed);
-            return;
-        }
-        else if (Time.time < lastDodgeTime + dodgeCooldown)
-        {
-            Move(Vector3.zero, 0);
-            return;
-        }
-
         var vertical = Input.GetAxis("Vertical");
         var horizontal = Input.GetAxis("Horizontal");
         var isDodgeStart = Input.GetButton("Jump");
         var leftClick = Input.GetMouseButton(0);
         var rightClick = Input.GetMouseButton(1);
 
+        var direction = transform.forward * vertical + transform.right * horizontal;
+
+        if (controller.isGrounded == false)
+        {
+            Fall();
+            return;
+        }
+        if (IsInState("Dodge"))
+        {
+            Dodge(dodgeDirection);
+            return;
+        }
+        else if (IsInState("DodgeRecovery"))
+        {
+            Idle();
+            return;
+        }
+
+
         animator.SetBool("Attack Right", leftClick);
         animator.SetBool("Attack Down", rightClick);
 
-        var direction = transform.forward * vertical + transform.right * horizontal;
 
         if (direction.magnitude < 1e-3)
         {
-            Move(Vector3.zero, 0);
+            Idle();
             return;
         }
 
@@ -63,9 +62,9 @@ public class HeroController : MonoBehaviour
         {
             Dodge(direction);
         }
-        else
+        else if (IsInState("Idle") || IsInState("RunForward"))
         {
-            Move(direction, runSpeed);
+            Run(direction);
         }
     }
 
@@ -76,10 +75,36 @@ public class HeroController : MonoBehaviour
         controller.Move(direction.normalized * speed * Time.deltaTime + gravity);
     }
 
+    private void Run(Vector3 direction)
+    {
+        Move(direction, runSpeed);
+    }
+
+    private void Idle()
+    {
+        Move(Vector3.zero, 0);
+    }
+
+    private void Fall()
+    {
+        Idle();
+    }
+
     private void Dodge(Vector3 direction)
     {
         Move(direction, dodgeSpeed);
-        lastDodgeTime = Time.time;
         dodgeDirection = direction.normalized;
+    }
+
+    private bool IsInState(string stateName)
+    {
+        var state = animator.GetCurrentAnimatorStateInfo(0);
+        var nextState = animator.GetNextAnimatorStateInfo(0);
+        return state.IsName(stateName) || nextState.IsName(stateName);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log($"{name} hit by enemy {other.name}");
     }
 }
