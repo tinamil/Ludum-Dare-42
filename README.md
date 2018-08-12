@@ -1,10 +1,11 @@
 # Ludum Dare 42
 
-[[https://github.com/tinamil/Ludum-Dare-42/blob/master/Dusk%20Spirits%20Title%20Screen.png|alt=title]]
 
-[[https://github.com/tinamil/Ludum-Dare-42/blob/master/Dusk%20Spirits%20Action%20Shot.png]]
+![Alt text](https://github.com/tinamil/Ludum-Dare-42/blob/master/Dusk%20Spirits%20Title%20Screen.png?raw=true)
 
-[[https://github.com/tinamil/Ludum-Dare-42/blob/master/Dusk%20Spirits%20Action%20Shot%202.png]]
+![Alt text](https://github.com/tinamil/Ludum-Dare-42/blob/master/Dusk%20Spirits%20Action%20Shot.png?raw=true)
+
+![Alt text](https://github.com/tinamil/Ludum-Dare-42/blob/master/Dusk%20Spirits%20Action%20Shot%202.png?raw=true)
 
 
 Tools used:
