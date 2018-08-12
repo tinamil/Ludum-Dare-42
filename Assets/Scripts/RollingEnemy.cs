@@ -22,11 +22,22 @@ public class RollingEnemy : MonoBehaviour
 
     private float circumference;
 
+    public float maxCooldown = 20;
+    public GameObject prefab;
+    private float startTime;
+    private float nextCooldown;
     // Use this for initialization
     void Start()
     {
         hero = GameObject.FindGameObjectWithTag("Player");
         circumference = 2 * Mathf.PI * radius;
+        ResetCooldown();
+    }
+
+    void ResetCooldown()
+    {
+        startTime = Time.time;
+        nextCooldown = Random.Range(0, maxCooldown);
     }
 
     // Update is called once per frame
@@ -35,6 +46,14 @@ public class RollingEnemy : MonoBehaviour
         var heroVector = hero.transform.position - transform.position;
         heroVector.y = 0;
         Roll(heroVector);
+        if (prefab != null && Time.time > startTime + nextCooldown)
+        {
+            ResetCooldown();
+            var pos = transform.position;
+            pos.y = 0.5f;
+            var clone = Instantiate(prefab, pos, Quaternion.identity, null);
+            clone.SetActive(true);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -71,8 +90,12 @@ public class RollingEnemy : MonoBehaviour
             HPText.transform.SetParent(null);
             Destroy(this.gameObject);
         }
+        else
+        {
+            GetComponent<AudioSource>().PlayOneShot(onHitSounds[Random.Range(0, onHitSounds.Length - 1)]);
+        }
     }
-    
+
 
     void Roll(Vector3 direction)
     {
