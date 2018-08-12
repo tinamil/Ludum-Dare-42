@@ -28,12 +28,19 @@ public class HeroController : MonoBehaviour
     public GameObject leftHand;
     public GameObject sword;
 
+    public AudioClip[] onHitSounds;
+
     // Use this for initialization
     void Start()
     {
         controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
         Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    private void OnDestroy()
+    {
+        Cursor.lockState = CursorLockMode.None;
     }
 
     // Update is called once per frame
@@ -148,6 +155,7 @@ public class HeroController : MonoBehaviour
                 StopCoroutine(runningDamageRoutine);
             }
             runningDamageRoutine = StartCoroutine(FadeOut(1, damageIndicator));
+            GetComponent<AudioSource>().PlayOneShot(onHitSounds[Random.Range(0, onHitSounds.Length - 1)]);
         }
     }
 

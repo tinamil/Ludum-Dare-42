@@ -14,6 +14,8 @@ public class Enemy : MonoBehaviour
 
     private readonly float HitCooldown = .5f;
     private float lastHit;
+    public AudioClip[] deathSounds;
+    public AudioClip[] onHitSounds;
 
     // Use this for initialization
     void Start()
@@ -64,8 +66,13 @@ public class Enemy : MonoBehaviour
         HitPoints -= damage;
         if (HitPoints <= 0)
         {
+            SoundManager.PlayClip(deathSounds);
             textComponent.transform.SetParent(null);
             Destroy(this.gameObject);
+        }
+        else
+        {
+            GetComponent<AudioSource>().PlayOneShot(onHitSounds[Random.Range(0, onHitSounds.Length - 1)]);
         }
     }
 

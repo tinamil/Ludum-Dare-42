@@ -9,10 +9,13 @@ public class RollingEnemy : MonoBehaviour
     GameObject hero;
     Coroutine runningFade;
     public float HitPoints = 50;
-    public TMP_Text HPText;
+    public TextFadeOut HPText;
     public GameObject rollingModel;
     public float radius;
     public float speed;
+
+    public AudioClip[] deathSounds;
+    public AudioClip[] onHitSounds;
 
     private readonly float HitCooldown = .5f;
     private float lastHit;
@@ -27,7 +30,7 @@ public class RollingEnemy : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         var heroVector = hero.transform.position - transform.position;
         heroVector.y = 0;
@@ -56,32 +59,24 @@ public class RollingEnemy : MonoBehaviour
     void TakeDamage(float damage)
     {
         HPText.gameObject.SetActive(true);
-        HPText.text = damage.ToString("f0");
+        HPText.SetText(damage.ToString("f0"));
         if (runningFade != null)
         {
             StopCoroutine(runningFade);
         }
         HitPoints -= damage;
-        if (HitPoints <= 0) Destroy(this.gameObject);
-        runningFade = StartCoroutine(FadeOut(HPText));
-    }
-
-
-    IEnumerator FadeOut(TMP_Text text, float time = 1f)
-    {
-        var remainingTime = time;
-        while (remainingTime >= 0)
+        if (HitPoints <= 0)
         {
-            text.color = new Color(text.color.r, text.color.g, text.color.b, Mathf.Lerp(1, 0, (time - remainingTime) / time));
-            remainingTime -= Time.deltaTime;
-            yield return null;
+            SoundManager.PlayClip(deathSounds);
+            HPText.transform.SetParent(null);
+            Destroy(this.gameObject);
         }
-        text.gameObject.SetActive(false);
     }
+    
 
     void Roll(Vector3 direction)
     {
-        var distance = Time.fixedDeltaTime * speed;
+        var distance = Time.deltaTime * speed;
         var rollDegrees = distance / circumference * 360;
         var axis = Vector3.Cross(Vector3.up, direction);
         rollingModel.transform.Rotate(axis, rollDegrees, Space.World);
