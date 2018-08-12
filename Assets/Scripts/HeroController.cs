@@ -42,24 +42,19 @@ public class HeroController : MonoBehaviour
 
         var direction = transform.forward * vertical + transform.right * horizontal;
 
-        if (controller.isGrounded == false)
-        {
-            Fall();
-            return;
-        }
         if (IsInState("Dodge"))
         {
             Dodge(currentDirection, currentHorizontal, currentVertical);
             return;
         }
-        else if (IsInState("DodgeRecovery") || IsInState("Attack Run Recovery"))
-        {
-            Idle();
-            return;
-        }
         else if (IsInState("Attack Run"))
         {
             Move(currentDirection, jumpAttackSpeed);
+        }
+        else if (IsInState("DodgeRecovery") || IsInState("Attack Run Recovery") || controller.isGrounded == false)
+        {
+            Idle();
+            return;
         }
 
         transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0, transform.rotation.eulerAngles.y + mouseLook.x, 0), Time.deltaTime * rotationSpeed);
@@ -126,15 +121,19 @@ public class HeroController : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (IsInvincible) return;
-        Debug.Log($"{name} hit by enemy {other.name}");
-        if (IsInState("Block"))
-            animator.SetTrigger("OnHit");
-        GetComponent<Cinemachine.CinemachineImpulseSource>().GenerateImpulse();
-        if (runningDamageRoutine != null)
+        var enemyWeapon = other.GetComponent<EnemyWeapon>();
+        if(enemyWeapon != null)
         {
-            StopCoroutine(runningDamageRoutine);
+            Debug.Log($"{name} hit by enemy {other.name} for {enemyWeapon.damage} damage");
+            if (IsInState("Block"))
+                animator.SetTrigger("OnHit");
+            GetComponent<Cinemachine.CinemachineImpulseSource>().GenerateImpulse();
+            if (runningDamageRoutine != null)
+            {
+                StopCoroutine(runningDamageRoutine);
+            }
+            runningDamageRoutine = StartCoroutine(FadeOut(1, damageIndicator));
         }
-        runningDamageRoutine = StartCoroutine(FadeOut(1, damageIndicator));
     }
 
     private IEnumerator FadeOut(float time, Image image)

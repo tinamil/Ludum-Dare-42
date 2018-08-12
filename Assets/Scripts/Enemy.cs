@@ -9,6 +9,7 @@ public class Enemy : MonoBehaviour
     Coroutine runningFade;
     public GameObject[] HitTargets;
     public float RotationSpeed;
+    public float HitPoints = 50;
 
     // Use this for initialization
     void Start()
@@ -53,6 +54,8 @@ public class Enemy : MonoBehaviour
         {
             StopCoroutine(runningFade);
         }
+        HitPoints -= damage;
+        if (HitPoints <= 0) Destroy(this.gameObject);
         runningFade = StartCoroutine(FadeOut(textComponent));
     }
 
