@@ -203,17 +203,17 @@ AnimationClip:
       - serializedVersion: 3
         time: 0.16666667
         value: {x: 88, y: 0, z: 0}
-        inSlope: {x: 127.751976, y: 0, z: 0}
-        outSlope: {x: 127.751976, y: 0, z: 0}
+        inSlope: {x: 0, y: 0, z: 0}
+        outSlope: {x: 0, y: 0, z: 0}
         tangentMode: 0
         weightedMode: 0
         inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
         outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
       - serializedVersion: 3
-        time: 0.33333334
-        value: {x: 108.6, y: 0, z: 0}
-        inSlope: {x: 0, y: 0, z: 0}
-        outSlope: {x: 0, y: 0, z: 0}
+        time: 0.23333333
+        value: {x: 3.2170002, y: 0, z: 0}
+        inSlope: {x: -51.472057, y: 0, z: 0}
+        outSlope: {x: -51.472057, y: 0, z: 0}
         tangentMode: 0
         weightedMode: 0
         inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
@@ -1385,17 +1385,17 @@ AnimationClip:
       - serializedVersion: 3
         time: 0.16666667
         value: 88
-        inSlope: 127.751976
-        outSlope: 127.751976
+        inSlope: 0
+        outSlope: 0
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.33333334
-        value: 108.6
-        inSlope: 0
-        outSlope: 0
+        time: 0.23333333
+        value: 3.2170002
+        inSlope: -51.472057
+        outSlope: -51.472057
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
@@ -1447,7 +1447,7 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.33333334
+        time: 0.23333333
         value: 0
         inSlope: 0
         outSlope: 0
@@ -1502,7 +1502,7 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.33333334
+        time: 0.23333333
         value: 0
         inSlope: 0
         outSlope: 0
@@ -2848,7 +2848,8 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: Hip/Spine/Chest/Right Shoulder/Right Upper Arm/Right Elbow
+    path: Hip/Spine/Chest/Right Shoulder/Right Upper Arm/Right Elbow/Right Lower Arm/Right
+      Wrist
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -2858,7 +2859,8 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: Hip/Spine/Chest/Right Shoulder/Right Upper Arm/Right Elbow
+    path: Hip/Spine/Chest/Right Shoulder/Right Upper Arm/Right Elbow/Right Lower Arm/Right
+      Wrist
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -2868,7 +2870,8 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: Hip/Spine/Chest/Right Shoulder/Right Upper Arm/Right Elbow
+    path: Hip/Spine/Chest/Right Shoulder/Right Upper Arm/Right Elbow/Right Lower Arm/Right
+      Wrist
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -3091,8 +3094,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: Hip/Spine/Chest/Right Shoulder/Right Upper Arm/Right Elbow/Right Lower Arm/Right
-      Wrist
+    path: Hip/Spine/Chest/Right Shoulder/Right Upper Arm/Right Elbow
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -3102,8 +3104,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: Hip/Spine/Chest/Right Shoulder/Right Upper Arm/Right Elbow/Right Lower Arm/Right
-      Wrist
+    path: Hip/Spine/Chest/Right Shoulder/Right Upper Arm/Right Elbow
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -3113,8 +3114,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: Hip/Spine/Chest/Right Shoulder/Right Upper Arm/Right Elbow/Right Lower Arm/Right
-      Wrist
+    path: Hip/Spine/Chest/Right Shoulder/Right Upper Arm/Right Elbow
     classID: 4
     script: {fileID: 0}
   m_HasGenericRootTransform: 0

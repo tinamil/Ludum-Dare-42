@@ -21,6 +21,12 @@ public class HeroController : MonoBehaviour
     private float currentVertical;
     private float currentHorizontal;
     private Coroutine runningDamageRoutine;
+    private bool Blocking = false;
+    private bool Attacking = false;
+
+    public GameObject victoryObject;
+    public GameObject leftHand;
+    public GameObject sword;
 
     // Use this for initialization
     void Start()
@@ -33,9 +39,11 @@ public class HeroController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (GetComponent<Animator>().GetBool("Victory")) return;
+
         var vertical = Input.GetAxis("Vertical");
         var horizontal = Input.GetAxis("Horizontal");
-        var isDodgeStart = Input.GetButton("Jump");
+        var jump = Input.GetButton("Jump");
         var leftClick = Input.GetMouseButton(0);
         var rightClick = Input.GetMouseButton(1);
         var mouseLook = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
@@ -61,7 +69,10 @@ public class HeroController : MonoBehaviour
 
         animator.SetBool("Attack", leftClick);
         animator.SetBool("Block", rightClick);
+        animator.SetBool("Jump", jump);
 
+        Blocking = IsInState("Block");
+        Attacking = IsInState("Attack Right") || IsInState("Attack Down");
 
         if (direction.magnitude < 1e-3)
         {
@@ -69,11 +80,7 @@ public class HeroController : MonoBehaviour
             return;
         }
 
-        if (isDodgeStart)
-        {
-            Dodge(direction, horizontal, vertical);
-        }
-        else if (IsInState("RunForward"))
+        if (IsInState("RunForward") || IsInState("Attack Right") || IsInState("Attack Down") || IsInState("Block"))
         {
             Run(direction, horizontal, vertical);
         }
@@ -93,7 +100,10 @@ public class HeroController : MonoBehaviour
 
     private void Run(Vector3 direction, float horizontal, float vertical)
     {
-        Move(direction, runSpeed, horizontal, vertical);
+        var speed = runSpeed;
+        if (Blocking) speed *= .5f;
+        if (Attacking) speed *= .5f;
+        Move(direction, speed, horizontal, vertical);
     }
 
     private void Idle()
@@ -122,9 +132,14 @@ public class HeroController : MonoBehaviour
     {
         if (IsInvincible) return;
         var enemyWeapon = other.GetComponent<EnemyWeapon>();
-        if(enemyWeapon != null)
+        if (enemyWeapon != null)
         {
-            Debug.Log($"{name} hit by enemy {other.name} for {enemyWeapon.damage} damage");
+            var damage = enemyWeapon.damage;
+            if (Blocking)
+            {
+                damage *= 0.2f;
+            }
+            Debug.Log($"{name} hit by enemy {other.name} for {damage} damage");
             if (IsInState("Block"))
                 animator.SetTrigger("OnHit");
             GetComponent<Cinemachine.CinemachineImpulseSource>().GenerateImpulse();
@@ -147,5 +162,20 @@ public class HeroController : MonoBehaviour
             yield return null;
         }
         image.gameObject.SetActive(false);
+    }
+
+    public void DropSword()
+    {
+        Debug.Log("Dropping sword");
+        var pos = sword.transform.position;
+        sword.gameObject.layer = LayerMask.NameToLayer("Default");
+        var rigid = sword.gameObject.AddComponent<Rigidbody>();
+        rigid.position = pos;
+        sword.transform.SetParent(null);
+    }
+    public void PickupVictory()
+    {
+        Debug.Log("Picking up victory item");
+        victoryObject.transform.SetParent(leftHand.transform);
     }
 }

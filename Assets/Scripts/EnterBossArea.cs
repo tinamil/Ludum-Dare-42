@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class EnterBossArea : MonoBehaviour {
 
-    public GameObject oldArena;
-    public GameObject newArena;
+    public GameObject[] deactivate;
+    public GameObject[] activate;
 
     private void OnTriggerEnter(Collider other)
     {
-        oldArena.SetActive(false);
-        newArena.SetActive(true);
+        foreach(var obj in deactivate)
+            obj.SetActive(false);
+        foreach(var obj in activate) 
+            obj.SetActive(true);
     }
 }
