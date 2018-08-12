@@ -4,13 +4,12 @@ using UnityEngine;
 
 public class EnterBossArea : MonoBehaviour {
 
-    public GameObject OldArea, NewArea;
-
+    public GameObject oldArena;
+    public GameObject newArena;
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Swapping in original (non-hole) boss area");
-        OldArea.SetActive(false);
-        NewArea.SetActive(true);
+        oldArena.SetActive(false);
+        newArena.SetActive(true);
     }
 }
