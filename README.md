@@ -1,4 +1,4 @@
-# Ludum Dare 42
+# Ludum Dare 42 - Dusk Spirits
 
 
 ![Alt text](https://github.com/tinamil/Ludum-Dare-42/blob/master/Dusk%20Spirits%20Title%20Screen.png?raw=true)
